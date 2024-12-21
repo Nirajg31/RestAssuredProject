@@ -77,17 +77,22 @@ public class RestAPiAuto {
 
     @Test(dependsOnMethods = {"getEmployeeDetailsByID"})
     public void updateEmployeeDetails() {
+        String randomName = "User_" + UUID.randomUUID().toString().substring(0, 8);
+        String randomEmail = "user_" + UUID.randomUUID().toString().substring(0, 8) + "@example.com";
+
+        // Prepare request body
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("name", "Allasani Peddana1");
-        requestBody.put("email", "allasani.peddana@15ce.com");
+        requestBody.put("name", randomName);
+        requestBody.put("email", randomEmail);
         requestBody.put("status", "active");
 
+        // Send PUT request
         given()
                 .spec(requestSpecification)
                 .body(requestBody)
                 .log().all()
                 .when()
-                .patch("/public/v2/users/" + empid)
+                .put("/public/v2/users/" + empid)
                 .then()
                 .spec(responseSpecification)
                 .log().all();
