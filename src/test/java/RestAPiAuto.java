@@ -1,6 +1,8 @@
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -12,6 +14,7 @@ import static io.restassured.RestAssured.expect;
 import static io.restassured.RestAssured.given;
 
 public class RestAPiAuto {
+    private static final Logger logger = LogManager.getLogger(RestAPiAuto.class);
 
     private static RequestSpecification requestSpecification;
     private static ResponseSpecification responseSpecification;
@@ -30,7 +33,9 @@ public class RestAPiAuto {
     }
 
     @Test
-    public void createUser() {
+    public void createUser()
+    {
+        logger.info("Create user api execution started");
         Map<String, Object> createUserReq = new HashMap<>();
         createUserReq.put("name", "Niraj2 Gupta");
         createUserReq.put("gender", "Male");
@@ -51,10 +56,15 @@ public class RestAPiAuto {
                 .path("id");
 
         System.out.println("Created User ID: " + empid);
+        logger.info("Create user api execution Completed");
+
     }
 
     @Test(dependsOnMethods = {"createUser"})
-    public void getAllEmployeeDetails() {
+    public void getAllEmployeeDetails()
+    {
+        logger.info("Get user details api execution started");
+
         given()
                 .spec(requestSpecification)
                 .when()
@@ -62,6 +72,8 @@ public class RestAPiAuto {
                 .then()
                 .spec(responseSpecification)
                 .log().all();
+        logger.info("Get user details api execution Completed");
+
     }
 
     @Test(dependsOnMethods = {"getAllEmployeeDetails"})
